@@ -23,6 +23,7 @@ const productValidationSchema = z.object({
     .array(productVariantValidationSchema)
     .nonempty("Product variants are required"),
   inventory: inventoryValidationSchema,
+  isDeleted: z.boolean(),
 });
 
 export default productValidationSchema;

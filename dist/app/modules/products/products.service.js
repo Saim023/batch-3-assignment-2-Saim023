@@ -23,8 +23,13 @@ const getSingleProductFromDB = (id) => __awaiter(void 0, void 0, void 0, functio
     const result = yield products_model_1.ProductModel.findOne({ id });
     return result;
 });
+const deleteProductFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield products_model_1.ProductModel.updateOne({ id }, { isDeleted: true });
+    return result;
+});
 exports.ProductServices = {
     createProductsIntoDB,
     getAllProductsFromDB,
     getSingleProductFromDB,
+    deleteProductFromDB,
 };

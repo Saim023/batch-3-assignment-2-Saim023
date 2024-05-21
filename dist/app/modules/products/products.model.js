@@ -35,7 +35,13 @@ exports.productSchema = new mongoose_1.Schema({
         type: inventorySchema,
         required: [true, "Product inventory is required"],
     },
+    isDeleted: {
+        type: Boolean,
+        default: false,
+    },
 });
+// Delete operation using query middleware
+exports.productSchema.pre("find", function (next) { });
 // Model
 const ProductModel = (0, mongoose_1.model)("Products", exports.productSchema);
 exports.ProductModel = ProductModel;

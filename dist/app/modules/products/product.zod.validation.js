@@ -22,5 +22,6 @@ const productValidationSchema = zod_1.z.object({
         .array(productVariantValidationSchema)
         .nonempty("Product variants are required"),
     inventory: inventoryValidationSchema,
+    isDeleted: zod_1.z.boolean(),
 });
 exports.default = productValidationSchema;

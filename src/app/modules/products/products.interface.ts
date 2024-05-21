@@ -17,4 +17,5 @@ export type Product = {
   tags: string[];
   variants: ProductVariant[];
   inventory: Inventory;
+  isDeleted: boolean;
 };

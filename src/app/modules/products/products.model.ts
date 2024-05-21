@@ -36,6 +36,29 @@ export const productSchema = new Schema({
     type: inventorySchema,
     required: [true, "Product inventory is required"],
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+// Delete operation using query middleware
+productSchema.pre("find", function (next) {
+  this.find({ isDeleted: { $ne: true } });
+
+  next();
+});
+
+productSchema.pre("findOne", function (next) {
+  this.find({ isDeleted: { $ne: true } });
+
+  next();
+});
+
+productSchema.pre("aggregate", function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+
+  next();
 });
 
 // Model

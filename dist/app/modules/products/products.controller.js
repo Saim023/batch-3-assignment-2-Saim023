@@ -32,6 +32,7 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         console.log(error);
     }
 });
+// Get all products
 const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield products_service_1.ProductServices.getAllProductsFromDB();
@@ -41,10 +42,15 @@ const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
             data: result,
         });
     }
-    catch (error) {
-        console.log(error);
+    catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message || "Something went wrong",
+            error: err,
+        });
     }
 });
+// Get single products
 const getSingleProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const product = req.params.product;
@@ -55,10 +61,15 @@ const getSingleProducts = (req, res) => __awaiter(void 0, void 0, void 0, functi
             data: result,
         });
     }
-    catch (error) {
-        console.log(error);
+    catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message || "Something went wrong",
+            error: err,
+        });
     }
 });
+// Updating products
 const updateProductData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { productId } = req.params;
@@ -70,8 +81,31 @@ const updateProductData = (req, res) => __awaiter(void 0, void 0, void 0, functi
             data: updatedProduct,
         });
     }
-    catch (error) {
-        console.log(error);
+    catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message || "Something went wrong",
+            error: err,
+        });
+    }
+});
+// Delete products
+const deleteProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const product = req.params.product;
+        const result = yield products_service_1.ProductServices.deleteProductFromDB(product);
+        res.status(201).json({
+            success: true,
+            messege: "Product deleted successfully!",
+            data: result,
+        });
+    }
+    catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message || "Something went wrong",
+            error: err,
+        });
     }
 });
 exports.ProductControllers = {
@@ -79,4 +113,5 @@ exports.ProductControllers = {
     getAllProducts,
     getSingleProducts,
     updateProductData,
+    deleteProducts,
 };
