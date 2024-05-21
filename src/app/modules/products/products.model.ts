@@ -14,7 +14,7 @@ const inventorySchema = new Schema({
 });
 
 // Product schema
-const productSchema = new Schema({
+export const productSchema = new Schema({
   productId: {
     type: String,
     required: true,

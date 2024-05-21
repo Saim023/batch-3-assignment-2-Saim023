@@ -8,13 +8,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductControllers = void 0;
 const products_service_1 = require("./products.service");
+const product_zod_validation_1 = __importDefault(require("./product.zod.validation"));
+const products_model_1 = require("./products.model");
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const product = req.body.product;
-        const result = yield products_service_1.ProductServices.createProductsIntoDB(product);
+        const { product: productData } = req.body;
+        // zod validation
+        const zodParsedData = product_zod_validation_1.default.parse(productData);
+        const result = yield products_service_1.ProductServices.createProductsIntoDB(zodParsedData);
         res.status(201).json({
             success: true,
             message: "Product created successfully!",
@@ -40,8 +47,8 @@ const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 const getSingleProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { productId } = req.params;
-        const result = yield products_service_1.ProductServices.getSingleProductFromDB(productId);
+        const product = req.params.product;
+        const result = yield products_service_1.ProductServices.getSingleProductFromDB(product);
         res.status(201).json({
             success: true,
             messege: "Product fetched successfully!",
@@ -52,8 +59,24 @@ const getSingleProducts = (req, res) => __awaiter(void 0, void 0, void 0, functi
         console.log(error);
     }
 });
+const updateProductData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { productId } = req.params;
+        const updateData = req.body;
+        const updatedProduct = yield products_model_1.ProductModel.findByIdAndUpdate(productId, updateData, { new: true, runValidators: true });
+        res.status(201).json({
+            success: true,
+            message: "Product updated successfully!",
+            data: updatedProduct,
+        });
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
 exports.ProductControllers = {
     createProduct,
     getAllProducts,
     getSingleProducts,
+    updateProductData,
 };

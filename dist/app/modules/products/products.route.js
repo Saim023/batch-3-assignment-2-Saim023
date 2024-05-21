@@ -11,4 +11,5 @@ const router = express_1.default.Router();
 router.post("/create-products", products_controller_1.ProductControllers.createProduct);
 router.get("/", products_controller_1.ProductControllers.getAllProducts);
 router.get("/:productId", products_controller_1.ProductControllers.getSingleProducts);
+router.put("/:productId", products_controller_1.ProductControllers.updateProductData);
 exports.ProductRoutes = router;
