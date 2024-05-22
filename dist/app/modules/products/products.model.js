@@ -29,11 +29,9 @@ exports.productSchema = new mongoose_1.Schema({
     tags: { type: [String], required: [true, "Product tags are required"] },
     variants: {
         type: [productVariantSchema],
-        required: [true, "Product variants are required"],
     },
     inventory: {
         type: inventorySchema,
-        required: [true, "Product inventory is required"],
     },
     isDeleted: {
         type: Boolean,
@@ -41,7 +39,18 @@ exports.productSchema = new mongoose_1.Schema({
     },
 });
 // Delete operation using query middleware
-exports.productSchema.pre("find", function (next) { });
+exports.productSchema.pre("find", function (next) {
+    this.find({ isDeleted: { $ne: true } });
+    next();
+});
+exports.productSchema.pre("findOne", function (next) {
+    this.find({ isDeleted: { $ne: true } });
+    next();
+});
+exports.productSchema.pre("aggregate", function (next) {
+    this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+    next();
+});
 // Model
 const ProductModel = (0, mongoose_1.model)("Products", exports.productSchema);
 exports.ProductModel = ProductModel;

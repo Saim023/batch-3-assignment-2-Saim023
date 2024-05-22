@@ -30,11 +30,9 @@ export const productSchema = new Schema({
   tags: { type: [String], required: [true, "Product tags are required"] },
   variants: {
     type: [productVariantSchema],
-    required: [true, "Product variants are required"],
   },
   inventory: {
     type: inventorySchema,
-    required: [true, "Product inventory is required"],
   },
   isDeleted: {
     type: Boolean,

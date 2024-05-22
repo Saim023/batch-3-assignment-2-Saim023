@@ -108,10 +108,32 @@ const deleteProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
     }
 });
+// Search products
+const searchProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const searchTerm = req.query.searchTerm;
+    try {
+        const products = yield products_model_1.ProductModel.find({
+            name: { $regex: searchTerm, $options: "i" },
+        });
+        res.status(201).json({
+            success: true,
+            messege: "Products matching search term 'iphone' fetched successfully!",
+            data: products,
+        });
+    }
+    catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message || "Something went wrong",
+            error: err,
+        });
+    }
+});
 exports.ProductControllers = {
     createProduct,
     getAllProducts,
     getSingleProducts,
     updateProductData,
     deleteProducts,
+    searchProducts,
 };

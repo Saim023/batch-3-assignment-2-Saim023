@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
 import { ProductServices } from "./products.service";
 import productValidationSchema from "./product.zod.validation";
@@ -106,10 +107,33 @@ const deleteProducts = async (req: Request, res: Response) => {
   }
 };
 
+// Search products
+const searchProducts = async (req: Request, res: Response) => {
+  const searchTerm = req.query.searchTerm;
+  try {
+    const products = await ProductModel.find({
+      name: { $regex: searchTerm, $options: "i" },
+    });
+
+    res.status(201).json({
+      success: true,
+      messege: "Products matching search term 'iphone' fetched successfully!",
+      data: products,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || "Something went wrong",
+      error: err,
+    });
+  }
+};
+
 export const ProductControllers = {
   createProduct,
   getAllProducts,
   getSingleProducts,
   updateProductData,
   deleteProducts,
+  searchProducts,
 };
